@@ -16,16 +16,30 @@
     "name": "Dante Darie",
     "email": "dante.darie@gmail.com"
   },
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js"
+    }
+  },
   "scripts": {
-    "build": "npx tsc",
-    "lint": "npx eslint ./src --ext .js,.ts",
-    "lint:fix": "npx eslint ./src --ext .js,.ts --fix",
+    "build": "npx tsc -p tsconfig.cjs.json && npx tsc -p tsconfig.esm.json && npx tsc -p tsconfig.types.json",
+    "lint": "npx eslint ./src --ext .ts",
+    "lint:fix": "npx eslint ./src --ext .ts --fix",
     "prepare": "husky",
     "prettier": "npx prettier . --write",
     "test": "vitest --watch false",
     "test:coverage": "vitest run --coverage --watch false",
     "test:watch": "vitest --watch true"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "geometric-library": "file:../geometric-library",
+    "opentype.js": "^1.3.4"
   },
   "devDependencies": {
     "@types/node": "^20.14.2",
@@ -33,16 +47,12 @@
     "@typescript-eslint/eslint-plugin": "^7.12.0",
     "@typescript-eslint/parser": "^7.12.0",
     "@vitest/coverage-v8": "^1.6.0",
-    "cheerio": "^1.0.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
-    "geometric-library": "file:../geometric-library",
     "husky": "^9.0.11",
-    "node-html-parser": "^6.1.13",
-    "opentype.js": "^1.3.4",
     "prettier": "^3.3.2",
     "prettier-eslint": "^16.3.0",
     "prettier-plugin-packagejson": "^2.5.0",
