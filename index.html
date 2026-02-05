@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Icon Font Test</title>
+    <style>
+      /* Define the custom font */
+      @font-face {
+        font-family: 'MyIconFontTest'; /* Must match the fontName used in generation */
+        src: url('./dist/test-fonts/MyIconFontTest.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      /* Style for elements using the icon font */
+      .iconfont {
+        font-family: 'MyIconFontTest';
+        font-size: 2em; /* Make icons larger */
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        /* Better font rendering */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* Basic layout for display */
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+      }
+
+      .glyph-display {
+        display: inline-block;
+        border: 1px solid #eee;
+        padding: 15px;
+        margin: 5px;
+        text-align: center;
+        min-width: 80px;
+      }
+
+      .glyph-display .icon {
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      .glyph-display .name {
+        font-size: 0.8em;
+        color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Icon Font Test: MyIconFontTest</h1>
+    <p>This page displays glyphs from the generated <code>MyIconFontTest.ttf</code> font.</p>
+    <hr />
+
+    <h2>Glyphs:</h2>
+
+    <!-- Glyphs will be added here dynamically or manually -->
+    <!-- Based on the last run, there should be 3 glyphs starting from E000 -->
+
+    <div class="glyph-display">
+      <span class="icon iconfont">&#xE000;</span>
+      <span class="name">[Glyph 1 Name - Placeholder]</span>
+      <!-- Replace with actual name if known -->
+    </div>
+
+    <div class="glyph-display">
+      <span class="icon iconfont">&#xE001;</span>
+      <span class="name">[Glyph 2 Name - Placeholder]</span>
+      <!-- Replace with actual name if known -->
+    </div>
+
+    <div class="glyph-display">
+      <span class="icon iconfont">&#xE002;</span>
+      <span class="name">[Glyph 3 Name - Placeholder]</span>
+      <!-- Replace with actual name if known -->
+    </div>
+
+    <!-- Add more divs like the above if more glyphs are generated -->
+
+    <script>
+      // Optional: Dynamically add glyph names if they are known/stored somewhere
+      // For now, placeholders are used.
+      // You could potentially read the debug SVG font file if generated,
+      // parse it, and extract the glyph names to update the placeholders.
+    </script>
+  </body>
+</html>
