@@ -14,7 +14,22 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "types": ["vitest/globals"]
+    "experimentalDecorators": true,
+    "types": ["vitest/globals"],
+    "paths": {
+      "@svg-loader": ["./svg-loader"],
+      "@svg-loader/*": ["./svg-loader/*"],
+      "@svg-parser": ["./svg-parser"],
+      "@svg-parser/*": ["./svg-parser/*"],
+      "@svg-normalizer": ["./svg-normalizer"],
+      "@svg-normalizer/*": ["./svg-normalizer/*"],
+      "@svg-winding-corrector": ["./svg-winding-corrector"],
+      "@svg-winding-corrector/*": ["./svg-winding-corrector/*"],
+      "@svg-opentype-transformer": ["./svg-opentype-transformer"],
+      "@svg-opentype-transformer/*": ["./svg-opentype-transformer/*"],
+      "@main": ["./main"],
+      "@main/*": ["./main/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
