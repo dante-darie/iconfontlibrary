@@ -9,9 +9,9 @@ function createCcwSquare(x: number, y: number, size: number): ISvgShape {
       new Line([new Point([x, y]), new Point([x + size, y])]),
       new Line([new Point([x + size, y]), new Point([x + size, y + size])]),
       new Line([new Point([x + size, y + size]), new Point([x, y + size])]),
-      new Line([new Point([x, y + size]), new Point([x, y])]),
+      new Line([new Point([x, y + size]), new Point([x, y])])
     ],
-    isClosed: true,
+    isClosed: true
   };
 }
 
@@ -22,9 +22,9 @@ function createCwSquare(x: number, y: number, size: number): ISvgShape {
       new Line([new Point([x, y]), new Point([x, y + size])]),
       new Line([new Point([x, y + size]), new Point([x + size, y + size])]),
       new Line([new Point([x + size, y + size]), new Point([x + size, y])]),
-      new Line([new Point([x + size, y]), new Point([x, y])]),
+      new Line([new Point([x + size, y]), new Point([x, y])])
     ],
-    isClosed: true,
+    isClosed: true
   };
 }
 
@@ -37,7 +37,12 @@ describe('SvgWindingCorrector', () => {
 
   describe('computeSignedArea', () => {
     it('should return positive area for CCW polygon', () => {
-      const points = [{ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 10, y: 10 }, { x: 0, y: 10 }];
+      const points = [
+        { x: 0, y: 0 },
+        { x: 10, y: 0 },
+        { x: 10, y: 10 },
+        { x: 0, y: 10 }
+      ];
       const area = corrector.computeSignedArea(points);
 
       expect(area).toBeGreaterThan(0);
@@ -45,7 +50,12 @@ describe('SvgWindingCorrector', () => {
     });
 
     it('should return negative area for CW polygon', () => {
-      const points = [{ x: 0, y: 0 }, { x: 0, y: 10 }, { x: 10, y: 10 }, { x: 10, y: 0 }];
+      const points = [
+        { x: 0, y: 0 },
+        { x: 0, y: 10 },
+        { x: 10, y: 10 },
+        { x: 10, y: 0 }
+      ];
       const area = corrector.computeSignedArea(points);
 
       expect(area).toBeLessThan(0);
@@ -53,7 +63,10 @@ describe('SvgWindingCorrector', () => {
     });
 
     it('should return zero for degenerate polygon', () => {
-      const points = [{ x: 0, y: 0 }, { x: 10, y: 0 }];
+      const points = [
+        { x: 0, y: 0 },
+        { x: 10, y: 0 }
+      ];
       const area = corrector.computeSignedArea(points);
 
       expect(area).toBe(0);
@@ -61,7 +74,12 @@ describe('SvgWindingCorrector', () => {
   });
 
   describe('isPointInsidePolygon', () => {
-    const square = [{ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 10, y: 10 }, { x: 0, y: 10 }];
+    const square = [
+      { x: 0, y: 0 },
+      { x: 10, y: 0 },
+      { x: 10, y: 10 },
+      { x: 0, y: 10 }
+    ];
 
     it('should return true for point inside polygon', () => {
       expect(corrector.isPointInsidePolygon({ x: 5, y: 5 }, square)).toBe(true);
@@ -78,10 +96,7 @@ describe('SvgWindingCorrector', () => {
 
   describe('sampleContourPoints', () => {
     it('should return endpoints for line figures', () => {
-      const figures = [
-        new Line([new Point([0, 0]), new Point([10, 0])]),
-        new Line([new Point([10, 0]), new Point([10, 10])]),
-      ];
+      const figures = [new Line([new Point([0, 0]), new Point([10, 0])]), new Line([new Point([10, 0]), new Point([10, 10])])];
 
       const points = corrector.sampleContourPoints(figures);
 
@@ -92,9 +107,7 @@ describe('SvgWindingCorrector', () => {
     });
 
     it('should return sampled points for cubic bezier figures', () => {
-      const figures = [
-        new CubicBezierCurve([new Point([0, 0]), new Point([5, 10]), new Point([15, 10]), new Point([20, 0])]),
-      ];
+      const figures = [new CubicBezierCurve([new Point([0, 0]), new Point([5, 10]), new Point([15, 10]), new Point([20, 0])])];
 
       const points = corrector.sampleContourPoints(figures);
 
@@ -106,9 +119,7 @@ describe('SvgWindingCorrector', () => {
     });
 
     it('should return sampled points for quadratic bezier figures', () => {
-      const figures = [
-        new QuadraticBezierCurve([new Point([0, 0]), new Point([10, 20]), new Point([20, 0])]),
-      ];
+      const figures = [new QuadraticBezierCurve([new Point([0, 0]), new Point([10, 20]), new Point([20, 0])])];
 
       const points = corrector.sampleContourPoints(figures);
 
@@ -120,11 +131,7 @@ describe('SvgWindingCorrector', () => {
     });
 
     it('should not duplicate shared endpoints between consecutive figures', () => {
-      const figures = [
-        new Line([new Point([0, 0]), new Point([10, 0])]),
-        new CubicBezierCurve([new Point([10, 0]), new Point([15, 5]), new Point([15, 15]), new Point([10, 20])]),
-        new Line([new Point([10, 20]), new Point([0, 20])]),
-      ];
+      const figures = [new Line([new Point([0, 0]), new Point([10, 0])]), new CubicBezierCurve([new Point([10, 0]), new Point([15, 5]), new Point([15, 15]), new Point([10, 20])]), new Line([new Point([10, 20]), new Point([0, 20])])];
 
       const points = corrector.sampleContourPoints(figures);
 
@@ -197,11 +204,8 @@ describe('SvgWindingCorrector', () => {
 
     it('should reverse cubic bezier control points', () => {
       const shape: ISvgShape = {
-        figures: [
-          new CubicBezierCurve([new Point([0, 0]), new Point([5, 10]), new Point([15, 10]), new Point([20, 0])]),
-          new Line([new Point([20, 0]), new Point([0, 0])]),
-        ],
-        isClosed: true,
+        figures: [new CubicBezierCurve([new Point([0, 0]), new Point([5, 10]), new Point([15, 10]), new Point([20, 0])]), new Line([new Point([20, 0]), new Point([0, 0])])],
+        isClosed: true
       };
 
       const reversed = corrector.reverseShapeWinding(shape);
@@ -214,8 +218,18 @@ describe('SvgWindingCorrector', () => {
 
   describe('computeContainmentDepth', () => {
     it('should return 0 for outermost shape', () => {
-      const outerPolygon = [{ x: 0, y: 0 }, { x: 100, y: 0 }, { x: 100, y: 100 }, { x: 0, y: 100 }];
-      const innerPolygon = [{ x: 20, y: 20 }, { x: 80, y: 20 }, { x: 80, y: 80 }, { x: 20, y: 80 }];
+      const outerPolygon = [
+        { x: 0, y: 0 },
+        { x: 100, y: 0 },
+        { x: 100, y: 100 },
+        { x: 0, y: 100 }
+      ];
+      const innerPolygon = [
+        { x: 20, y: 20 },
+        { x: 80, y: 20 },
+        { x: 80, y: 80 },
+        { x: 20, y: 80 }
+      ];
 
       const depth = corrector.computeContainmentDepth(0, [outerPolygon, innerPolygon]);
 
@@ -223,8 +237,18 @@ describe('SvgWindingCorrector', () => {
     });
 
     it('should return 1 for shape inside another', () => {
-      const outerPolygon = [{ x: 0, y: 0 }, { x: 100, y: 0 }, { x: 100, y: 100 }, { x: 0, y: 100 }];
-      const innerPolygon = [{ x: 20, y: 20 }, { x: 80, y: 20 }, { x: 80, y: 80 }, { x: 20, y: 80 }];
+      const outerPolygon = [
+        { x: 0, y: 0 },
+        { x: 100, y: 0 },
+        { x: 100, y: 100 },
+        { x: 0, y: 100 }
+      ];
+      const innerPolygon = [
+        { x: 20, y: 20 },
+        { x: 80, y: 20 },
+        { x: 80, y: 80 },
+        { x: 20, y: 80 }
+      ];
 
       const depth = corrector.computeContainmentDepth(1, [outerPolygon, innerPolygon]);
 
@@ -232,9 +256,24 @@ describe('SvgWindingCorrector', () => {
     });
 
     it('should return 2 for doubly nested shape', () => {
-      const outer = [{ x: 0, y: 0 }, { x: 100, y: 0 }, { x: 100, y: 100 }, { x: 0, y: 100 }];
-      const middle = [{ x: 10, y: 10 }, { x: 90, y: 10 }, { x: 90, y: 90 }, { x: 10, y: 90 }];
-      const inner = [{ x: 30, y: 30 }, { x: 70, y: 30 }, { x: 70, y: 70 }, { x: 30, y: 70 }];
+      const outer = [
+        { x: 0, y: 0 },
+        { x: 100, y: 0 },
+        { x: 100, y: 100 },
+        { x: 0, y: 100 }
+      ];
+      const middle = [
+        { x: 10, y: 10 },
+        { x: 90, y: 10 },
+        { x: 90, y: 90 },
+        { x: 10, y: 90 }
+      ];
+      const inner = [
+        { x: 30, y: 30 },
+        { x: 70, y: 30 },
+        { x: 70, y: 70 },
+        { x: 30, y: 70 }
+      ];
 
       const depth = corrector.computeContainmentDepth(2, [outer, middle, inner]);
 
@@ -287,7 +326,7 @@ describe('SvgWindingCorrector', () => {
     it('should return shapes unchanged when all are open', () => {
       const openShape: ISvgShape = {
         figures: [new Line([new Point([0, 0]), new Point([10, 10])])],
-        isClosed: false,
+        isClosed: false
       };
 
       const result = corrector.correct([openShape]);
@@ -344,7 +383,7 @@ describe('SvgWindingCorrector', () => {
       const closed = createCcwSquare(0, 0, 100);
       const open: ISvgShape = {
         figures: [new Line([new Point([0, 0]), new Point([50, 50])])],
-        isClosed: false,
+        isClosed: false
       };
 
       const result = corrector.correct([closed, open]);
@@ -362,7 +401,7 @@ describe('SvgWindingCorrector', () => {
       const bg1 = createCcwSquare(0, 0, 100);
       const bg2 = createCcwSquare(0, 0, 100);
       const iconOuter = createCcwSquare(10, 10, 80); // CCW = outer contour
-      const iconHole = createCwSquare(20, 20, 60);   // CW = hole
+      const iconHole = createCwSquare(20, 20, 60); // CW = hole
 
       const result = corrector.correct([bg1, bg2, iconOuter, iconHole]);
 
@@ -373,7 +412,7 @@ describe('SvgWindingCorrector', () => {
       const holeArea = corrector.computeSignedArea(corrector.sampleContourPoints(result[1].figures));
 
       expect(outerArea).toBeGreaterThan(0); // CCW preserved
-      expect(holeArea).toBeLessThan(0);     // CW preserved
+      expect(holeArea).toBeLessThan(0); // CW preserved
     });
 
     it('should keep all unique shapes at multiple nesting depths after removing duplicates', () => {
@@ -390,7 +429,7 @@ describe('SvgWindingCorrector', () => {
       const areas = result.map((s) => corrector.computeSignedArea(corrector.sampleContourPoints(s.figures)));
 
       expect(areas[0]).toBeGreaterThan(0); // middle stays CCW
-      expect(areas[1]).toBeLessThan(0);    // inner stays CW
+      expect(areas[1]).toBeLessThan(0); // inner stays CW
     });
   });
 });

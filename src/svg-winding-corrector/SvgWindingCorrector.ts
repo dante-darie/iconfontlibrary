@@ -77,7 +77,7 @@ export class SvgWindingCorrector {
       const yi = polygon[i].y;
       const yj = polygon[j].y;
 
-      if ((yi > point.y) !== (yj > point.y)) {
+      if (yi > point.y !== yj > point.y) {
         const xIntersect = ((polygon[j].x - polygon[i].x) * (point.y - yi)) / (yj - yi) + polygon[i].x;
 
         if (point.x < xIntersect) {
@@ -168,7 +168,7 @@ export class SvgWindingCorrector {
 
     return {
       x: u3 * points[0].x + 3 * u2 * t * points[1].x + 3 * u * t2 * points[2].x + t3 * points[3].x,
-      y: u3 * points[0].y + 3 * u2 * t * points[1].y + 3 * u * t2 * points[2].y + t3 * points[3].y,
+      y: u3 * points[0].y + 3 * u2 * t * points[1].y + 3 * u * t2 * points[2].y + t3 * points[3].y
     };
   }
 
@@ -176,7 +176,10 @@ export class SvgWindingCorrector {
     const points = figure.values as IPoint2D[];
 
     if (figure instanceof Line) {
-      return [{ x: points[0].x, y: points[0].y }, { x: points[1].x, y: points[1].y }];
+      return [
+        { x: points[0].x, y: points[0].y },
+        { x: points[1].x, y: points[1].y }
+      ];
     }
 
     if (figure instanceof CubicBezierCurve) {
@@ -207,7 +210,7 @@ export class SvgWindingCorrector {
 
     return {
       x: u * u * points[0].x + 2 * u * t * points[1].x + t * t * points[2].x,
-      y: u * u * points[0].y + 2 * u * t * points[1].y + t * t * points[2].y,
+      y: u * u * points[0].y + 2 * u * t * points[1].y + t * t * points[2].y
     };
   }
 }

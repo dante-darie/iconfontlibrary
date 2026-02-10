@@ -4,25 +4,22 @@ import type { ISvgShape } from '@svg-parser';
 import { SvgNormalizer } from './SvgNormalizer';
 import type { ISvgNormalizerOptions } from './SvgNormalizer.types';
 
-const COMPLEX_MULTI_SUBPATH_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>';
+const COMPLEX_MULTI_SUBPATH_SVG =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>';
 
-const DRIBBLE_SVG = '<svg fill="#000000" height="800px" width="800px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-271 273 255.9 256"><path d="M-18.7,374.8c-1.7-8.2-4.2-16.2-7.5-24c-3.2-7.6-7.2-14.8-11.8-21.6c-4.6-6.8-9.8-13-15.5-18.8c-5.8-5.8-12.2-11.1-18.8-15.5c-6.8-4.6-14.2-8.6-21.6-11.8c-7.7-3.3-15.7-5.8-24-7.5c-8.4-1.7-17-2.6-25.7-2.6s-17.3,0.9-25.7,2.6c-8.2,1.7-16.2,4.2-23.9,7.5c-7.6,3.2-14.8,7.2-21.6,11.8c-6.8,4.6-13.1,9.8-18.8,15.5s-11,12.2-15.5,18.8c-4.6,6.8-8.6,14-11.8,21.6c-3.3,7.7-5.8,15.7-7.5,24c-1.7,8.4-2.6,17-2.6,25.7s0.9,17.3,2.6,25.7c1.7,8.2,4.2,16.2,7.5,23.9c3.2,7.6,7.2,14.8,11.8,21.7c4.6,6.8,9.8,13,15.5,18.8c5.8,5.8,12.2,11,18.8,15.5c6.8,4.6,14.2,8.6,21.6,11.8c7.7,3.3,15.7,5.8,23.9,7.5c8.4,1.7,17,2.6,25.7,2.6s17.2-0.9,25.7-2.6c8.2-1.7,16.2-4.2,24-7.5c7.6-3.2,14.8-7.2,21.6-11.8c6.8-4.6,13.1-9.8,18.8-15.5c5.8-5.8,11-12.2,15.5-18.8c4.6-6.8,8.6-14.1,11.8-21.7c3.3-7.7,5.8-15.7,7.5-23.9c1.7-8.4,2.6-17,2.6-25.7S-17,383.2-18.7,374.8z M-143.6,291.6c27.6,0,52.7,10.3,71.9,27.2c-0.3,0.4-15.7,24-56.9,39.4c-18.6-34.2-39.1-61.4-40.8-63.6C-161.1,292.7-152.5,291.6-143.6,291.6z M-169.9,294.8C-169.9,294.7-169.8,294.7-169.9,294.8L-169.9,294.8z M-190.1,302c1.5,1.9,21.6,29.3,40.5,62.8c-52.3,13.8-97.7,13.3-100.5,13.2C-243.2,344.3-220.5,316.3-190.1,302z M-224.7,473.2c-17.3-19.2-27.9-44.7-27.9-72.7c0-1.2,0.1-2.3,0.1-3.4c1.9,0,55.7,1.3,111.8-15.5c3.1,6.1,6.1,12.4,8.9,18.5c-1.4,0.4-2.9,0.8-4.3,1.3C-194.9,420.4-224.7,473.2-224.7,473.2z M-143.6,509.4c-25.4,0-48.5-8.7-67-23.1c0.4-0.8,21.5-45.7,85.5-68c0.2-0.1,0.5-0.2,0.7-0.2c15.3,39.8,21.6,73.1,23.2,82.7C-114.2,506.3-128.6,509.4-143.6,509.4z M-82.8,490.8c-1.1-6.6-6.9-38.5-21.2-77.8c35.2-5.6,65.7,4,67.9,4.8C-40.9,448.1-58.4,474.3-82.8,490.8z M-110.6,395.8c-0.8-1.9-1.6-3.7-2.4-5.6c-2.3-5.4-4.7-10.6-7.3-15.8c43-17.5,60.5-42.8,60.7-43.1c15.2,18.6,24.5,42.3,24.8,68.1C-36.3,399.1-73.2,391.1-110.6,395.8z"/></svg>';
+const DRIBBLE_SVG =
+  '<svg fill="#000000" height="800px" width="800px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-271 273 255.9 256"><path d="M-18.7,374.8c-1.7-8.2-4.2-16.2-7.5-24c-3.2-7.6-7.2-14.8-11.8-21.6c-4.6-6.8-9.8-13-15.5-18.8c-5.8-5.8-12.2-11.1-18.8-15.5c-6.8-4.6-14.2-8.6-21.6-11.8c-7.7-3.3-15.7-5.8-24-7.5c-8.4-1.7-17-2.6-25.7-2.6s-17.3,0.9-25.7,2.6c-8.2,1.7-16.2,4.2-23.9,7.5c-7.6,3.2-14.8,7.2-21.6,11.8c-6.8,4.6-13.1,9.8-18.8,15.5s-11,12.2-15.5,18.8c-4.6,6.8-8.6,14-11.8,21.6c-3.3,7.7-5.8,15.7-7.5,24c-1.7,8.4-2.6,17-2.6,25.7s0.9,17.3,2.6,25.7c1.7,8.2,4.2,16.2,7.5,23.9c3.2,7.6,7.2,14.8,11.8,21.7c4.6,6.8,9.8,13,15.5,18.8c5.8,5.8,12.2,11,18.8,15.5c6.8,4.6,14.2,8.6,21.6,11.8c7.7,3.3,15.7,5.8,23.9,7.5c8.4,1.7,17,2.6,25.7,2.6s17.2-0.9,25.7-2.6c8.2-1.7,16.2-4.2,24-7.5c7.6-3.2,14.8-7.2,21.6-11.8c6.8-4.6,13.1-9.8,18.8-15.5c5.8-5.8,11-12.2,15.5-18.8c4.6-6.8,8.6-14.1,11.8-21.7c3.3-7.7,5.8-15.7,7.5-23.9c1.7-8.4,2.6-17,2.6-25.7S-17,383.2-18.7,374.8z M-143.6,291.6c27.6,0,52.7,10.3,71.9,27.2c-0.3,0.4-15.7,24-56.9,39.4c-18.6-34.2-39.1-61.4-40.8-63.6C-161.1,292.7-152.5,291.6-143.6,291.6z M-169.9,294.8C-169.9,294.7-169.8,294.7-169.9,294.8L-169.9,294.8z M-190.1,302c1.5,1.9,21.6,29.3,40.5,62.8c-52.3,13.8-97.7,13.3-100.5,13.2C-243.2,344.3-220.5,316.3-190.1,302z M-224.7,473.2c-17.3-19.2-27.9-44.7-27.9-72.7c0-1.2,0.1-2.3,0.1-3.4c1.9,0,55.7,1.3,111.8-15.5c3.1,6.1,6.1,12.4,8.9,18.5c-1.4,0.4-2.9,0.8-4.3,1.3C-194.9,420.4-224.7,473.2-224.7,473.2z M-143.6,509.4c-25.4,0-48.5-8.7-67-23.1c0.4-0.8,21.5-45.7,85.5-68c0.2-0.1,0.5-0.2,0.7-0.2c15.3,39.8,21.6,73.1,23.2,82.7C-114.2,506.3-128.6,509.4-143.6,509.4z M-82.8,490.8c-1.1-6.6-6.9-38.5-21.2-77.8c35.2-5.6,65.7,4,67.9,4.8C-40.9,448.1-58.4,474.3-82.8,490.8z M-110.6,395.8c-0.8-1.9-1.6-3.7-2.4-5.6c-2.3-5.4-4.7-10.6-7.3-15.8c43-17.5,60.5-42.8,60.7-43.1c15.2,18.6,24.5,42.3,24.8,68.1C-36.3,399.1-73.2,391.1-110.6,395.8z"/></svg>';
 
 const DEFAULT_OPTIONS: ISvgNormalizerOptions = {
   ascender: 800,
   descender: -200,
-  unitsPerEm: 1000,
+  unitsPerEm: 1000
 };
 
 function createRectShape(x1: number, y1: number, x2: number, y2: number): ISvgShape {
   return {
-    figures: [
-      new Line([new Point([x1, y1]), new Point([x2, y1])]),
-      new Line([new Point([x2, y1]), new Point([x2, y2])]),
-      new Line([new Point([x2, y2]), new Point([x1, y2])]),
-      new Line([new Point([x1, y2]), new Point([x1, y1])]),
-    ],
-    isClosed: true,
+    figures: [new Line([new Point([x1, y1]), new Point([x2, y1])]), new Line([new Point([x2, y1]), new Point([x2, y2])]), new Line([new Point([x2, y2]), new Point([x1, y2])]), new Line([new Point([x1, y2]), new Point([x1, y1])])],
+    isClosed: true
   };
 }
 
@@ -32,12 +29,7 @@ function createSquareShapes(x: number, y: number, size: number): ISvgShape[] {
   const bottomRight = new Point([x + size, y + size]);
   const bottomLeft = new Point([x, y + size]);
 
-  const figures = [
-    new Line([topLeft, topRight]),
-    new Line([topRight, bottomRight]),
-    new Line([bottomRight, bottomLeft]),
-    new Line([bottomLeft, topLeft]),
-  ];
+  const figures = [new Line([topLeft, topRight]), new Line([topRight, bottomRight]), new Line([bottomRight, bottomLeft]), new Line([bottomLeft, topLeft])];
 
   return [{ figures, isClosed: true }];
 }
@@ -88,15 +80,12 @@ describe('SvgNormalizer', () => {
 
   describe('non-square rectangle', () => {
     it('should normalize a tall rectangle (width < height)', () => {
-      const shapes: ISvgShape[] = [{
-        figures: [
-          new Line([new Point([0, 0]), new Point([50, 0])]),
-          new Line([new Point([50, 0]), new Point([50, 100])]),
-          new Line([new Point([50, 100]), new Point([0, 100])]),
-          new Line([new Point([0, 100]), new Point([0, 0])]),
-        ],
-        isClosed: true,
-      }];
+      const shapes: ISvgShape[] = [
+        {
+          figures: [new Line([new Point([0, 0]), new Point([50, 0])]), new Line([new Point([50, 0]), new Point([50, 100])]), new Line([new Point([50, 100]), new Point([0, 100])]), new Line([new Point([0, 100]), new Point([0, 0])])],
+          isClosed: true
+        }
+      ];
 
       const result = normalizer.normalize(shapes, DEFAULT_OPTIONS);
 
@@ -104,15 +93,12 @@ describe('SvgNormalizer', () => {
     });
 
     it('should normalize a wide rectangle (width > height)', () => {
-      const shapes: ISvgShape[] = [{
-        figures: [
-          new Line([new Point([0, 0]), new Point([200, 0])]),
-          new Line([new Point([200, 0]), new Point([200, 100])]),
-          new Line([new Point([200, 100]), new Point([0, 100])]),
-          new Line([new Point([0, 100]), new Point([0, 0])]),
-        ],
-        isClosed: true,
-      }];
+      const shapes: ISvgShape[] = [
+        {
+          figures: [new Line([new Point([0, 0]), new Point([200, 0])]), new Line([new Point([200, 0]), new Point([200, 100])]), new Line([new Point([200, 100]), new Point([0, 100])]), new Line([new Point([0, 100]), new Point([0, 0])])],
+          isClosed: true
+        }
+      ];
 
       const result = normalizer.normalize(shapes, DEFAULT_OPTIONS);
 
@@ -156,15 +142,12 @@ describe('SvgNormalizer', () => {
 
   describe('advance width calculation', () => {
     it('should compute advance width based on SVG width and scale factor', () => {
-      const shapes: ISvgShape[] = [{
-        figures: [
-          new Line([new Point([0, 0]), new Point([448, 0])]),
-          new Line([new Point([448, 0]), new Point([448, 512])]),
-          new Line([new Point([448, 512]), new Point([0, 512])]),
-          new Line([new Point([0, 512]), new Point([0, 0])]),
-        ],
-        isClosed: true,
-      }];
+      const shapes: ISvgShape[] = [
+        {
+          figures: [new Line([new Point([0, 0]), new Point([448, 0])]), new Line([new Point([448, 0]), new Point([448, 512])]), new Line([new Point([448, 512]), new Point([0, 512])]), new Line([new Point([0, 512]), new Point([0, 0])])],
+          isClosed: true
+        }
+      ];
 
       const result = normalizer.normalize(shapes, DEFAULT_OPTIONS);
 
@@ -178,23 +161,23 @@ describe('SvgNormalizer', () => {
     });
 
     it('should throw on zero-height bounding box', () => {
-      const shapes: ISvgShape[] = [{
-        figures: [
-          new Line([new Point([0, 0]), new Point([100, 0])]),
-        ],
-        isClosed: false,
-      }];
+      const shapes: ISvgShape[] = [
+        {
+          figures: [new Line([new Point([0, 0]), new Point([100, 0])])],
+          isClosed: false
+        }
+      ];
 
       expect(() => normalizer.normalize(shapes, DEFAULT_OPTIONS)).toThrow('SVG_NORMALIZER_ZERO_DIMENSION');
     });
 
     it('should throw on zero-width bounding box', () => {
-      const shapes: ISvgShape[] = [{
-        figures: [
-          new Line([new Point([0, 0]), new Point([0, 100])]),
-        ],
-        isClosed: false,
-      }];
+      const shapes: ISvgShape[] = [
+        {
+          figures: [new Line([new Point([0, 0]), new Point([0, 100])])],
+          isClosed: false
+        }
+      ];
 
       expect(() => normalizer.normalize(shapes, DEFAULT_OPTIONS)).toThrow('SVG_NORMALIZER_ZERO_DIMENSION');
     });

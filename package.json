@@ -1,5 +1,5 @@
 {
-  "name": "iconfontlib",
+  "name": "iconfontlibrary",
   "version": "1.0.0",
   "description": "A Node based utility that packs svg icons into a font file of different formats such as ttf, woff, woff2 and more.",
   "keywords": [
@@ -13,7 +13,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/dante-darie/iconfontlib.git"
+    "url": "https://github.com/dante-darie/iconfontlibrary.git"
   },
   "license": "MIT",
   "author": {
@@ -32,10 +32,10 @@
   "types": "dist/types/index.d.ts",
   "scripts": {
     "build": "npm run clean && npm run build:cjs && npm run build:esm && npm run build:types",
-    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
     "build:cjs": "npx tsc -p tsconfig.cjs.json && npx tsc-alias -p tsconfig.cjs.json",
     "build:esm": "npx tsc -p tsconfig.esm.json && npx tsc-alias -p tsconfig.esm.json",
     "build:types": "npx tsc -p tsconfig.types.json && npx tsc-alias -p tsconfig.types.json",
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
     "lint": "npx eslint ./src --ext .ts",
     "lint:fix": "npx eslint ./src --ext .ts --fix",
     "prepare": "husky",

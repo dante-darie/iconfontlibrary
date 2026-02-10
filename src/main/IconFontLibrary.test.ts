@@ -9,7 +9,8 @@ import type { IIconFontLibraryOptions } from './IconFontLibrary.types';
 
 const SIMPLE_SQUARE_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100"/></svg>';
 const SIMPLE_CIRCLE_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>';
-const COMPLEX_MULTI_SUBPATH_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>';
+const COMPLEX_MULTI_SUBPATH_SVG =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>';
 
 function createTempDir(): string {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'icon-font-test-'));
@@ -23,7 +24,7 @@ function createDefaultOptions(svgDir: string, outputDir: string): IIconFontLibra
   return {
     familyName: 'TestIcons',
     outputDirectory: outputDir,
-    svgDirectories: [svgDir],
+    svgDirectories: [svgDir]
   };
 }
 
@@ -67,7 +68,7 @@ describe('IconFontLibrary', () => {
         ascender: 900,
         descender: -100,
         styleName: 'Bold',
-        unitsPerEm: 2048,
+        unitsPerEm: 2048
       });
       const result = library.generate();
 
@@ -90,7 +91,7 @@ describe('IconFontLibrary', () => {
       expect(result.fontBuffer).toBeInstanceOf(ArrayBuffer);
       expect(result.fontBuffer.byteLength).toBeGreaterThan(0);
       expect(result.glyphNames).toEqual(['square']);
-      expect(result.unicodeMap).toEqual({ square: 0xE000 });
+      expect(result.unicodeMap).toEqual({ square: 0xe000 });
     });
 
     it('should generate a font with multiple glyphs', () => {
@@ -101,7 +102,7 @@ describe('IconFontLibrary', () => {
       const result = library.generate();
 
       expect(result.glyphNames).toEqual(['circle', 'square']);
-      expect(result.unicodeMap).toEqual({ circle: 0xE000, square: 0xE001 });
+      expect(result.unicodeMap).toEqual({ circle: 0xe000, square: 0xe001 });
     });
 
     it('should sort glyphs alphabetically by file name', () => {
@@ -114,9 +115,9 @@ describe('IconFontLibrary', () => {
 
       expect(result.glyphNames).toEqual(['alpha', 'middle', 'zebra']);
       expect(result.unicodeMap).toEqual({
-        alpha: 0xE000,
-        middle: 0xE001,
-        zebra: 0xE002,
+        alpha: 0xe000,
+        middle: 0xe001,
+        zebra: 0xe002
       });
     });
 
@@ -125,7 +126,7 @@ describe('IconFontLibrary', () => {
 
       const library = new IconFontLibrary({
         ...createDefaultOptions(svgDir, outputDir),
-        familyName: 'MyCustomIcons',
+        familyName: 'MyCustomIcons'
       });
       const result = library.generate();
 
@@ -155,7 +156,7 @@ describe('IconFontLibrary', () => {
       const library = new IconFontLibrary(createDefaultOptions(svgDir, outputDir));
       const result = library.generate();
 
-      expect(result.unicodeMap).toEqual({ a: 0xE000, b: 0xE001 });
+      expect(result.unicodeMap).toEqual({ a: 0xe000, b: 0xe001 });
     });
 
     it('should support custom start code point for auto assignment', () => {
@@ -164,11 +165,11 @@ describe('IconFontLibrary', () => {
 
       const library = new IconFontLibrary({
         ...createDefaultOptions(svgDir, outputDir),
-        unicodeAssignment: { startCodePoint: 0xF000, strategy: 'auto' },
+        unicodeAssignment: { startCodePoint: 0xf000, strategy: 'auto' }
       });
       const result = library.generate();
 
-      expect(result.unicodeMap).toEqual({ a: 0xF000, b: 0xF001 });
+      expect(result.unicodeMap).toEqual({ a: 0xf000, b: 0xf001 });
     });
 
     it('should support manual unicode assignment', () => {
@@ -178,13 +179,13 @@ describe('IconFontLibrary', () => {
       const library = new IconFontLibrary({
         ...createDefaultOptions(svgDir, outputDir),
         unicodeAssignment: {
-          mapping: { 'icon-a': 0xE100, 'icon-b': 0xE200 },
-          strategy: 'manual',
-        },
+          mapping: { 'icon-a': 0xe100, 'icon-b': 0xe200 },
+          strategy: 'manual'
+        }
       });
       const result = library.generate();
 
-      expect(result.unicodeMap).toEqual({ 'icon-a': 0xE100, 'icon-b': 0xE200 });
+      expect(result.unicodeMap).toEqual({ 'icon-a': 0xe100, 'icon-b': 0xe200 });
     });
 
     it('should handle error for manual mode with no mapping provided', () => {
@@ -193,7 +194,7 @@ describe('IconFontLibrary', () => {
 
       const library = new IconFontLibrary({
         ...createDefaultOptions(svgDir, outputDir),
-        unicodeAssignment: { strategy: 'manual' },
+        unicodeAssignment: { strategy: 'manual' }
       });
 
       const result = library.generate();
@@ -211,9 +212,9 @@ describe('IconFontLibrary', () => {
       const library = new IconFontLibrary({
         ...createDefaultOptions(svgDir, outputDir),
         unicodeAssignment: {
-          mapping: { mapped: 0xE000 },
-          strategy: 'manual',
-        },
+          mapping: { mapped: 0xe000 },
+          strategy: 'manual'
+        }
       });
 
       const result = library.generate();
@@ -243,7 +244,7 @@ describe('IconFontLibrary', () => {
 
       const library = new IconFontLibrary({
         ...createDefaultOptions(svgDir, outputDir),
-        ligatures: false,
+        ligatures: false
       });
       const result = library.generate();
 
@@ -279,7 +280,7 @@ describe('IconFontLibrary', () => {
 
       const library = new IconFontLibrary({
         ...createDefaultOptions(svgDir, outputDir),
-        svgDirectories: [fakePath],
+        svgDirectories: [fakePath]
       });
 
       const result = library.generate();
@@ -308,7 +309,7 @@ describe('IconFontLibrary', () => {
 
       const library = new IconFontLibrary({
         ...createDefaultOptions(svgDir, outputDir),
-        familyName: 'CustomFont',
+        familyName: 'CustomFont'
       });
       library.generateToFile();
 
@@ -321,7 +322,7 @@ describe('IconFontLibrary', () => {
 
       const library = new IconFontLibrary({
         ...createDefaultOptions(svgDir, outputDir),
-        outputDirectory: nestedOutput,
+        outputDirectory: nestedOutput
       });
       library.generateToFile();
 
@@ -353,7 +354,7 @@ describe('IconFontLibrary', () => {
 
       expect(font.names.fontFamily.en).toBe('TestIcons');
       expect(result.glyphNames).toEqual(['testicon']);
-      expect(result.unicodeMap).toEqual({ testicon: 0xE000 });
+      expect(result.unicodeMap).toEqual({ testicon: 0xe000 });
 
       // With ligatures for "testicon" — unique chars: t,e,s,i,c,o,n = 7 unique chars
       // .notdef + 7 char glyphs + 1 icon glyph = 9
@@ -361,7 +362,7 @@ describe('IconFontLibrary', () => {
 
       const lastGlyph = font.glyphs.get(font.numGlyphs - 1);
       expect(lastGlyph.name).toBe('testicon');
-      expect(lastGlyph.unicode).toBe(0xE000);
+      expect(lastGlyph.unicode).toBe(0xe000);
       expect(lastGlyph.advanceWidth).toBeGreaterThan(0);
     });
 

@@ -1,19 +1,6 @@
 import * as cheerio from 'cheerio';
 import type { Element } from 'domhandler';
-import {
-  ArcCurve,
-  Angle,
-  CubicBezierCurve,
-  Circle,
-  Ellipse,
-  Flag,
-  Line,
-  Magnitude,
-  Point,
-  Polygon,
-  QuadraticBezierCurve,
-  Vector,
-} from 'geometric-library';
+import { ArcCurve, Angle, CubicBezierCurve, Circle, Ellipse, Flag, Line, Magnitude, Point, Polygon, QuadraticBezierCurve, Vector } from 'geometric-library';
 import type { ISvgParserResult, ISvgShape, ISvgViewBox, TStandardFigure } from './SvgParser.types';
 
 interface IPathParserState {
@@ -61,9 +48,7 @@ export class SvgParser {
       case 'scale': {
         const scaleX = transform.scaleX ?? 1;
         const scaleY = transform.scaleY ?? scaleX;
-        const about = (transform.centerX !== undefined && transform.centerY !== undefined)
-          ? new Point([transform.centerX, transform.centerY])
-          : undefined;
+        const about = transform.centerX !== undefined && transform.centerY !== undefined ? new Point([transform.centerX, transform.centerY]) : undefined;
 
         if (scaleX === scaleY) {
           figure.scale(scaleX, about);
@@ -75,9 +60,7 @@ export class SvgParser {
       case 'rotate': {
         const angleDegrees = transform.angle ?? 0;
         const angle = new Angle(angleDegrees, 'degrees');
-        const about = (transform.centerX !== undefined && transform.centerY !== undefined)
-          ? new Point([transform.centerX, transform.centerY])
-          : undefined;
+        const about = transform.centerX !== undefined && transform.centerY !== undefined ? new Point([transform.centerX, transform.centerY]) : undefined;
         figure.rotate(angle, about);
         return figure;
       }
@@ -100,17 +83,7 @@ export class SvgParser {
     });
   }
 
-  private createArcCurveFigures(
-    startX: number,
-    startY: number,
-    rx: number,
-    ry: number,
-    xAxisRotation: number,
-    largeArcFlag: number,
-    sweepFlag: number,
-    endX: number,
-    endY: number
-  ): TStandardFigure[] {
+  private createArcCurveFigures(startX: number, startY: number, rx: number, ry: number, xAxisRotation: number, largeArcFlag: number, sweepFlag: number, endX: number, endY: number): TStandardFigure[] {
     const startPoint = new Point([startX, startY]);
     const endPoint = new Point([endX, endY]);
     const radiusX = new Magnitude(Math.abs(rx));
@@ -232,7 +205,7 @@ export class SvgParser {
       lastControlX: undefined,
       lastControlY: undefined,
       subPathStartX: 0,
-      subPathStartY: 0,
+      subPathStartY: 0
     };
 
     let tokenIndex = 0;
@@ -338,44 +311,28 @@ export class SvgParser {
     const topLineEnd = new Point([x + width - effectiveRx, y]);
     figures.push(new Line([topLineStart, topLineEnd]));
 
-    const topRightArcFigures = this.createArcCurveFigures(
-      x + width - effectiveRx, y,
-      effectiveRx, effectiveRy, 0, 0, 1,
-      x + width, y + effectiveRy
-    );
+    const topRightArcFigures = this.createArcCurveFigures(x + width - effectiveRx, y, effectiveRx, effectiveRy, 0, 0, 1, x + width, y + effectiveRy);
     figures.push(...topRightArcFigures);
 
     const rightLineStart = new Point([x + width, y + effectiveRy]);
     const rightLineEnd = new Point([x + width, y + height - effectiveRy]);
     figures.push(new Line([rightLineStart, rightLineEnd]));
 
-    const bottomRightArcFigures = this.createArcCurveFigures(
-      x + width, y + height - effectiveRy,
-      effectiveRx, effectiveRy, 0, 0, 1,
-      x + width - effectiveRx, y + height
-    );
+    const bottomRightArcFigures = this.createArcCurveFigures(x + width, y + height - effectiveRy, effectiveRx, effectiveRy, 0, 0, 1, x + width - effectiveRx, y + height);
     figures.push(...bottomRightArcFigures);
 
     const bottomLineStart = new Point([x + width - effectiveRx, y + height]);
     const bottomLineEnd = new Point([x + effectiveRx, y + height]);
     figures.push(new Line([bottomLineStart, bottomLineEnd]));
 
-    const bottomLeftArcFigures = this.createArcCurveFigures(
-      x + effectiveRx, y + height,
-      effectiveRx, effectiveRy, 0, 0, 1,
-      x, y + height - effectiveRy
-    );
+    const bottomLeftArcFigures = this.createArcCurveFigures(x + effectiveRx, y + height, effectiveRx, effectiveRy, 0, 0, 1, x, y + height - effectiveRy);
     figures.push(...bottomLeftArcFigures);
 
     const leftLineStart = new Point([x, y + height - effectiveRy]);
     const leftLineEnd = new Point([x, y + effectiveRy]);
     figures.push(new Line([leftLineStart, leftLineEnd]));
 
-    const topLeftArcFigures = this.createArcCurveFigures(
-      x, y + effectiveRy,
-      effectiveRx, effectiveRy, 0, 0, 1,
-      x + effectiveRx, y
-    );
+    const topLeftArcFigures = this.createArcCurveFigures(x, y + effectiveRy, effectiveRx, effectiveRy, 0, 0, 1, x + effectiveRx, y);
     figures.push(...topLeftArcFigures);
 
     return [{ figures, isClosed: true }];
@@ -395,14 +352,14 @@ export class SvgParser {
           transforms.push({
             translateX: params[0] ?? 0,
             translateY: params[1] ?? 0,
-            type: 'translate',
+            type: 'translate'
           });
           break;
         case 'scale':
           transforms.push({
             scaleX: params[0] ?? 1,
             scaleY: params[1],
-            type: 'scale',
+            type: 'scale'
           });
           break;
         case 'rotate':
@@ -410,7 +367,7 @@ export class SvgParser {
             angle: params[0] ?? 0,
             centerX: params[1],
             centerY: params[2],
-            type: 'rotate',
+            type: 'rotate'
           });
           break;
       }
@@ -426,7 +383,10 @@ export class SvgParser {
       return undefined;
     }
 
-    const parts = viewBoxAttr.trim().split(/[\s,]+/).map(Number);
+    const parts = viewBoxAttr
+      .trim()
+      .split(/[\s,]+/)
+      .map(Number);
 
     if (parts.length < 4 || parts.some(isNaN)) {
       return undefined;
@@ -436,17 +396,11 @@ export class SvgParser {
       height: parts[3],
       minX: parts[0],
       minY: parts[1],
-      width: parts[2],
+      width: parts[2]
     };
   }
 
-  private processArcTo(
-    tokens: (string | number)[],
-    startIndex: number,
-    state: IPathParserState,
-    currentShapeFigures: TStandardFigure[],
-    isRelative: boolean
-  ): { currentShapeFigures: TStandardFigure[]; nextTokenIndex: number } {
+  private processArcTo(tokens: (string | number)[], startIndex: number, state: IPathParserState, currentShapeFigures: TStandardFigure[], isRelative: boolean): { currentShapeFigures: TStandardFigure[]; nextTokenIndex: number } {
     let tokenIndex = startIndex;
 
     while (tokenIndex + 6 < tokens.length && typeof tokens[tokenIndex] === 'number') {
@@ -461,11 +415,7 @@ export class SvgParser {
       const endX = isRelative ? state.currentX + rawEndX : rawEndX;
       const endY = isRelative ? state.currentY + rawEndY : rawEndY;
 
-      const arcFigures = this.createArcCurveFigures(
-        state.currentX, state.currentY,
-        rx, ry, xAxisRotation, largeArcFlag, sweepFlag,
-        endX, endY
-      );
+      const arcFigures = this.createArcCurveFigures(state.currentX, state.currentY, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, endX, endY);
       currentShapeFigures.push(...arcFigures);
 
       state.currentX = endX;
@@ -480,12 +430,7 @@ export class SvgParser {
     return { currentShapeFigures, nextTokenIndex: tokenIndex };
   }
 
-  private processChildren(
-    $: cheerio.CheerioAPI,
-    parentElement: cheerio.Cheerio<Element>,
-    shapes: ISvgShape[],
-    parentTransforms: IParsedTransform[]
-  ): void {
+  private processChildren($: cheerio.CheerioAPI, parentElement: cheerio.Cheerio<Element>, shapes: ISvgShape[], parentTransforms: IParsedTransform[]): void {
     parentElement.children().each((_index, child) => {
       if (child.type !== 'tag') {
         return;
@@ -512,17 +457,9 @@ export class SvgParser {
     });
   }
 
-  private processClosePath(
-    tokenIndex: number,
-    state: IPathParserState,
-    currentShapeFigures: TStandardFigure[],
-    shapes: ISvgShape[]
-  ): { currentShapeFigures: TStandardFigure[]; nextTokenIndex: number } {
+  private processClosePath(tokenIndex: number, state: IPathParserState, currentShapeFigures: TStandardFigure[], shapes: ISvgShape[]): { currentShapeFigures: TStandardFigure[]; nextTokenIndex: number } {
     if (state.currentX !== state.subPathStartX || state.currentY !== state.subPathStartY) {
-      const closingLine = this.createLineFigure(
-        state.currentX, state.currentY,
-        state.subPathStartX, state.subPathStartY
-      );
+      const closingLine = this.createLineFigure(state.currentX, state.currentY, state.subPathStartX, state.subPathStartY);
       currentShapeFigures.push(closingLine);
     }
 
@@ -539,13 +476,7 @@ export class SvgParser {
     return { currentShapeFigures: [], nextTokenIndex: tokenIndex };
   }
 
-  private processCubicBezierTo(
-    tokens: (string | number)[],
-    startIndex: number,
-    state: IPathParserState,
-    currentShapeFigures: TStandardFigure[],
-    isRelative: boolean
-  ): { currentShapeFigures: TStandardFigure[]; nextTokenIndex: number } {
+  private processCubicBezierTo(tokens: (string | number)[], startIndex: number, state: IPathParserState, currentShapeFigures: TStandardFigure[], isRelative: boolean): { currentShapeFigures: TStandardFigure[]; nextTokenIndex: number } {
     let tokenIndex = startIndex;
 
     while (tokenIndex + 5 < tokens.length && typeof tokens[tokenIndex] === 'number') {
@@ -583,13 +514,7 @@ export class SvgParser {
     return { currentShapeFigures, nextTokenIndex: tokenIndex };
   }
 
-  private processHorizontalLineTo(
-    tokens: (string | number)[],
-    startIndex: number,
-    state: IPathParserState,
-    currentShapeFigures: TStandardFigure[],
-    isRelative: boolean
-  ): { currentShapeFigures: TStandardFigure[]; nextTokenIndex: number } {
+  private processHorizontalLineTo(tokens: (string | number)[], startIndex: number, state: IPathParserState, currentShapeFigures: TStandardFigure[], isRelative: boolean): { currentShapeFigures: TStandardFigure[]; nextTokenIndex: number } {
     let tokenIndex = startIndex;
 
     while (tokenIndex < tokens.length && typeof tokens[tokenIndex] === 'number') {
@@ -610,13 +535,7 @@ export class SvgParser {
     return { currentShapeFigures, nextTokenIndex: tokenIndex };
   }
 
-  private processLineTo(
-    tokens: (string | number)[],
-    startIndex: number,
-    state: IPathParserState,
-    currentShapeFigures: TStandardFigure[],
-    isRelative: boolean
-  ): { currentShapeFigures: TStandardFigure[]; nextTokenIndex: number } {
+  private processLineTo(tokens: (string | number)[], startIndex: number, state: IPathParserState, currentShapeFigures: TStandardFigure[], isRelative: boolean): { currentShapeFigures: TStandardFigure[]; nextTokenIndex: number } {
     let tokenIndex = startIndex;
 
     while (tokenIndex + 1 < tokens.length && typeof tokens[tokenIndex] === 'number') {
@@ -731,13 +650,7 @@ export class SvgParser {
     }
   }
 
-  private processQuadraticBezierTo(
-    tokens: (string | number)[],
-    startIndex: number,
-    state: IPathParserState,
-    currentShapeFigures: TStandardFigure[],
-    isRelative: boolean
-  ): { currentShapeFigures: TStandardFigure[]; nextTokenIndex: number } {
+  private processQuadraticBezierTo(tokens: (string | number)[], startIndex: number, state: IPathParserState, currentShapeFigures: TStandardFigure[], isRelative: boolean): { currentShapeFigures: TStandardFigure[]; nextTokenIndex: number } {
     let tokenIndex = startIndex;
 
     while (tokenIndex + 3 < tokens.length && typeof tokens[tokenIndex] === 'number') {
@@ -888,13 +801,7 @@ export class SvgParser {
     return { currentShapeFigures, nextTokenIndex: tokenIndex };
   }
 
-  private processVerticalLineTo(
-    tokens: (string | number)[],
-    startIndex: number,
-    state: IPathParserState,
-    currentShapeFigures: TStandardFigure[],
-    isRelative: boolean
-  ): { currentShapeFigures: TStandardFigure[]; nextTokenIndex: number } {
+  private processVerticalLineTo(tokens: (string | number)[], startIndex: number, state: IPathParserState, currentShapeFigures: TStandardFigure[], isRelative: boolean): { currentShapeFigures: TStandardFigure[]; nextTokenIndex: number } {
     let tokenIndex = startIndex;
 
     while (tokenIndex < tokens.length && typeof tokens[tokenIndex] === 'number') {

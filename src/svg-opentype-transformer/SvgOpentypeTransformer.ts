@@ -14,7 +14,7 @@ export class SvgOpentypeTransformer {
       advanceWidth: 0,
       name: '.notdef',
       path: new opentype.Path(),
-      unicode: 0,
+      unicode: 0
     });
 
     const ligatureDefinitions = definitions.filter((definition) => definition.ligature !== undefined);
@@ -28,7 +28,7 @@ export class SvgOpentypeTransformer {
       familyName: fontOptions.familyName,
       glyphs: allGlyphs,
       styleName: fontOptions.styleName,
-      unitsPerEm: fontOptions.unitsPerEm,
+      unitsPerEm: fontOptions.unitsPerEm
     });
 
     this.addLigatureSubstitutions(font, ligatureDefinitions, characterGlyphs, allGlyphs);
@@ -43,7 +43,7 @@ export class SvgOpentypeTransformer {
       advanceWidth: definition.normalizedData.advanceWidth,
       name: definition.name,
       path,
-      unicode: definition.unicode,
+      unicode: definition.unicode
     });
   }
 
@@ -88,12 +88,7 @@ export class SvgOpentypeTransformer {
     }
   }
 
-  private addLigatureSubstitutions(
-    font: opentype.Font,
-    ligatureDefinitions: IGlyphDefinition[],
-    characterGlyphs: opentype.Glyph[],
-    allGlyphs: opentype.Glyph[]
-  ): void {
+  private addLigatureSubstitutions(font: opentype.Font, ligatureDefinitions: IGlyphDefinition[], characterGlyphs: opentype.Glyph[], allGlyphs: opentype.Glyph[]): void {
     if (ligatureDefinitions.length === 0) {
       return;
     }
@@ -111,9 +106,7 @@ export class SvgOpentypeTransformer {
       const characterGlyphIndices = [];
 
       for (const char of ligatureString) {
-        const charGlyphIndex = allGlyphs.findIndex(
-          (glyph) => characterGlyphs.includes(glyph) && glyph.unicode === char.charCodeAt(0)
-        );
+        const charGlyphIndex = allGlyphs.findIndex((glyph) => characterGlyphs.includes(glyph) && glyph.unicode === char.charCodeAt(0));
 
         if (charGlyphIndex === -1) {
           break;
@@ -125,7 +118,7 @@ export class SvgOpentypeTransformer {
       if (characterGlyphIndices.length === ligatureString.length) {
         substitutionApi.addLigature('liga', {
           by: iconGlyphIndex,
-          sub: characterGlyphIndices,
+          sub: characterGlyphIndices
         });
       }
     }
@@ -149,7 +142,7 @@ export class SvgOpentypeTransformer {
         advanceWidth: 0,
         name: char,
         path: new opentype.Path(),
-        unicode: char.charCodeAt(0),
+        unicode: char.charCodeAt(0)
       });
       characterGlyphs.push(glyph);
     }
