@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/dante-darie/iconfontlibrary/compare/v1.0.0...v1.0.1) (2026-02-11)
+
+
+### Bug Fixes
+
+* public access for npm package ([303c0c0](https://github.com/dante-darie/iconfontlibrary/commit/303c0c0ba172d81d55573595436c9dc495c8192a))
+
 # 1.0.0 (2026-02-11)
 
 
