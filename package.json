@@ -16,6 +16,9 @@
     "url": "https://github.com/dante-darie/iconfontlibrary.git"
   },
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "author": {
     "name": "Dante Darie",
     "email": "dante.darie@gmail.com"
