@@ -4,12 +4,17 @@ import { SvgLoader } from '@svg-loader';
 import type { ISvgLoaderResult } from '@svg-loader';
 import { SvgParser } from '@svg-parser';
 import { SvgNormalizer } from '@svg-normalizer';
-import type { ISvgNormalizerOptions } from '@svg-normalizer';
+import type { ISvgNormalizerOptions, ISvgNormalizerResult } from '@svg-normalizer';
 import { SvgOpentypeTransformer } from '@svg-opentype-transformer';
 import type { IGlyphDefinition, IFontOptions } from '@svg-opentype-transformer';
 import { FontExporter } from '@font-exporter';
 import { CatchErrorDecorator } from 'error-handler';
 import type { IIconFontLibraryOptions, IIconFontLibraryResult } from './IconFontLibrary.types';
+
+interface ICacheEntry {
+  readonly mtimeMs: number;
+  readonly normalizedData: ISvgNormalizerResult;
+}
 
 const DEFAULT_ASCENDER = 800;
 const DEFAULT_DESCENDER = -200;
@@ -18,6 +23,7 @@ const DEFAULT_STYLE_NAME = 'Regular';
 const DEFAULT_UNITS_PER_EM = 1000;
 
 export class IconFontLibrary {
+  private readonly cache = new Map<string, ICacheEntry>();
   private readonly options: IIconFontLibraryOptions;
 
   constructor(options: IIconFontLibraryOptions) {
@@ -43,21 +49,33 @@ export class IconFontLibrary {
     const definitions: IGlyphDefinition[] = [];
 
     for (const file of sortedFiles) {
-      const parseResult = parser.parse(file.fileContent);
-      const normalizedData = normalizer.normalize(parseResult.shapes, {
-        ...normalizerOptions,
-        viewBox: parseResult.viewBox
-      });
+      const mtimeMs = fs.statSync(file.filePath).mtimeMs;
+      const cached = this.cache.get(file.fileName);
 
-      const definition: IGlyphDefinition = {
+      let normalizedData: ISvgNormalizerResult;
+
+      if (cached && cached.mtimeMs === mtimeMs) {
+        normalizedData = cached.normalizedData;
+      } else {
+        const parseResult = parser.parse(file.fileContent);
+
+        normalizedData = normalizer.normalize(parseResult.shapes, {
+          ...normalizerOptions,
+          viewBox: parseResult.viewBox
+        });
+
+        this.cache.set(file.fileName, { mtimeMs, normalizedData });
+      }
+
+      definitions.push({
         ligature: useLigatures ? file.fileName : undefined,
         name: file.fileName,
         normalizedData,
         unicode: unicodeMap[file.fileName]
-      };
-
-      definitions.push(definition);
+      });
     }
+
+    this.evictStaleEntries(sortedFiles);
 
     const glyphs = definitions.map((definition) => transformer.createGlyph(definition));
     const font = transformer.createFont(glyphs, definitions, fontOptions);
@@ -134,6 +152,16 @@ export class IconFontLibrary {
       descender: this.options.descender ?? DEFAULT_DESCENDER,
       unitsPerEm: this.options.unitsPerEm ?? DEFAULT_UNITS_PER_EM
     };
+  }
+
+  private evictStaleEntries(sortedFiles: ISvgLoaderResult[]): void {
+    const currentFileNames = new Set(sortedFiles.map((file) => file.fileName));
+
+    for (const key of this.cache.keys()) {
+      if (!currentFileNames.has(key)) {
+        this.cache.delete(key);
+      }
+    }
   }
 
   private loadSvgFiles(): ISvgLoaderResult[] {

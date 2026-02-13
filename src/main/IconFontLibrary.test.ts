@@ -394,6 +394,69 @@ describe('IconFontLibrary', () => {
     });
   });
 
+  describe('caching', () => {
+    it('should produce the same result when calling generate() twice with unchanged files', () => {
+      fs.writeFileSync(path.join(svgDir, 'home.svg'), SIMPLE_SQUARE_SVG);
+      fs.writeFileSync(path.join(svgDir, 'search.svg'), SIMPLE_CIRCLE_SVG);
+
+      const library = new IconFontLibrary(createDefaultOptions(svgDir, outputDir));
+      const first = library.generate();
+      const second = library.generate();
+
+      expect(second.glyphNames).toEqual(first.glyphNames);
+      expect(second.unicodeMap).toEqual(first.unicodeMap);
+    });
+
+    it('should reflect content changes when a file is modified between calls', () => {
+      const filePath = path.join(svgDir, 'icon.svg');
+
+      fs.writeFileSync(filePath, SIMPLE_SQUARE_SVG);
+
+      const library = new IconFontLibrary(createDefaultOptions(svgDir, outputDir));
+      library.generate();
+
+      // Write new content and ensure mtime advances
+      fs.writeFileSync(filePath, SIMPLE_CIRCLE_SVG);
+      const futureTime = Date.now() + 2000;
+      fs.utimesSync(filePath, futureTime / 1000, futureTime / 1000);
+
+      const second = library.generate();
+      const font = opentype.parse(second.fontBuffer);
+
+      expect(second.glyphNames).toEqual(['icon']);
+      expect(font.numGlyphs).toBeGreaterThan(1);
+    });
+
+    it('should reflect file removal between calls', () => {
+      fs.writeFileSync(path.join(svgDir, 'home.svg'), SIMPLE_SQUARE_SVG);
+      fs.writeFileSync(path.join(svgDir, 'search.svg'), SIMPLE_CIRCLE_SVG);
+
+      const library = new IconFontLibrary(createDefaultOptions(svgDir, outputDir));
+      const first = library.generate();
+
+      fs.unlinkSync(path.join(svgDir, 'search.svg'));
+
+      const second = library.generate();
+
+      expect(first.glyphNames).toEqual(['home', 'search']);
+      expect(second.glyphNames).toEqual(['home']);
+    });
+
+    it('should include a newly added file between calls', () => {
+      fs.writeFileSync(path.join(svgDir, 'home.svg'), SIMPLE_SQUARE_SVG);
+
+      const library = new IconFontLibrary(createDefaultOptions(svgDir, outputDir));
+      const first = library.generate();
+
+      fs.writeFileSync(path.join(svgDir, 'search.svg'), SIMPLE_CIRCLE_SVG);
+
+      const second = library.generate();
+
+      expect(first.glyphNames).toEqual(['home']);
+      expect(second.glyphNames).toEqual(['home', 'search']);
+    });
+  });
+
   describe('end-to-end with complex multi-subpath SVG', () => {
     it('should generate a valid font from complex multi-subpath SVG', () => {
       fs.writeFileSync(path.join(svgDir, 'testicon.svg'), COMPLEX_MULTI_SUBPATH_SVG);
