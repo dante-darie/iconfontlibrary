@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/dante-darie/iconfontlibrary/compare/v1.1.0...v1.2.0) (2026-02-13)
+
+
+### Features
+
+* implemented caching system ([2cd580c](https://github.com/dante-darie/iconfontlibrary/commit/2cd580c2d830bf7b060d3704e936291471755c63))
+
 # [1.1.0](https://github.com/dante-darie/iconfontlibrary/compare/v1.0.1...v1.1.0) (2026-02-13)
 
 
