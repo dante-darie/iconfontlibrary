@@ -27,6 +27,8 @@
       "@svg-winding-corrector/*": ["./svg-winding-corrector/*"],
       "@svg-opentype-transformer": ["./svg-opentype-transformer"],
       "@svg-opentype-transformer/*": ["./svg-opentype-transformer/*"],
+      "@font-exporter": ["./font-exporter"],
+      "@font-exporter/*": ["./font-exporter/*"],
       "@main": ["./main"],
       "@main/*": ["./main/*"]
     }

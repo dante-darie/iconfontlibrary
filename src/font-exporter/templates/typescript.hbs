@@ -1,0 +1,9 @@
+export const iconNames = [{{#each entries}}'{{name}}'{{#unless @last}}, {{/unless}}{{/each}}] as const;
+
+export const iconMap = {
+{{#each entries}}
+  '{{name}}': '\u{{unicode}}',
+{{/each}}
+} as const;
+
+export type TIcon = typeof iconNames[number];

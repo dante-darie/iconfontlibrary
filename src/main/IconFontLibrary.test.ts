@@ -341,6 +341,57 @@ describe('IconFontLibrary', () => {
 
       expect(font.names.fontFamily.en).toBe('TestIcons');
     });
+
+    it('should write all export files alongside the OTF', () => {
+      fs.writeFileSync(path.join(svgDir, 'icon.svg'), SIMPLE_SQUARE_SVG);
+
+      const library = new IconFontLibrary(createDefaultOptions(svgDir, outputDir));
+      library.generateToFile();
+
+      expect(fs.existsSync(path.join(outputDir, 'TestIcons.otf'))).toBe(true);
+      expect(fs.existsSync(path.join(outputDir, 'TestIcons.json'))).toBe(true);
+      expect(fs.existsSync(path.join(outputDir, 'TestIcons.css'))).toBe(true);
+      expect(fs.existsSync(path.join(outputDir, 'TestIcons.module.scss'))).toBe(true);
+      expect(fs.existsSync(path.join(outputDir, 'TestIcons.ts'))).toBe(true);
+      expect(fs.existsSync(path.join(outputDir, 'TestIcons.mjs'))).toBe(true);
+      expect(fs.existsSync(path.join(outputDir, 'TestIcons.cjs'))).toBe(true);
+    });
+
+    it('should write non-empty export files with correct content', () => {
+      fs.writeFileSync(path.join(svgDir, 'home.svg'), SIMPLE_SQUARE_SVG);
+      fs.writeFileSync(path.join(svgDir, 'search.svg'), SIMPLE_CIRCLE_SVG);
+
+      const library = new IconFontLibrary(createDefaultOptions(svgDir, outputDir));
+      library.generateToFile();
+
+      const json = fs.readFileSync(path.join(outputDir, 'TestIcons.json'), 'utf-8');
+      const parsed = JSON.parse(json);
+      expect(parsed).toEqual([
+        { name: 'home', unicode: 'e000' },
+        { name: 'search', unicode: 'e001' }
+      ]);
+
+      const css = fs.readFileSync(path.join(outputDir, 'TestIcons.css'), 'utf-8');
+      expect(css).toContain("font-family: 'TestIcons';");
+      expect(css).toContain('.TestIcons.home::before');
+      expect(css).toContain('.TestIcons.search::before');
+
+      const scss = fs.readFileSync(path.join(outputDir, 'TestIcons.module.scss'), 'utf-8');
+      expect(scss).toContain('&.home::before');
+      expect(scss).toContain('&.search::before');
+
+      const ts = fs.readFileSync(path.join(outputDir, 'TestIcons.ts'), 'utf-8');
+      expect(ts).toContain("export const iconNames = ['home', 'search'] as const;");
+      expect(ts).toContain('export type TIcon = typeof iconNames[number];');
+
+      const mjs = fs.readFileSync(path.join(outputDir, 'TestIcons.mjs'), 'utf-8');
+      expect(mjs).toContain("export const iconNames = ['home', 'search'];");
+      expect(mjs).toContain('export const iconMap = {');
+
+      const cjs = fs.readFileSync(path.join(outputDir, 'TestIcons.cjs'), 'utf-8');
+      expect(cjs).toContain("const iconNames = ['home', 'search'];");
+      expect(cjs).toContain('module.exports = { iconNames, iconMap };');
+    });
   });
 
   describe('end-to-end with complex multi-subpath SVG', () => {

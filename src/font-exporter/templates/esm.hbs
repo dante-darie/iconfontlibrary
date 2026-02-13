@@ -1,0 +1,7 @@
+export const iconNames = [{{#each entries}}'{{name}}'{{#unless @last}}, {{/unless}}{{/each}}];
+
+export const iconMap = {
+{{#each entries}}
+  '{{name}}': '\u{{unicode}}',
+{{/each}}
+};

@@ -7,6 +7,7 @@ import { SvgNormalizer } from '@svg-normalizer';
 import type { ISvgNormalizerOptions } from '@svg-normalizer';
 import { SvgOpentypeTransformer } from '@svg-opentype-transformer';
 import type { IGlyphDefinition, IFontOptions } from '@svg-opentype-transformer';
+import { FontExporter } from '@font-exporter';
 import { CatchErrorDecorator } from 'error-handler';
 import type { IIconFontLibraryOptions, IIconFontLibraryResult } from './IconFontLibrary.types';
 
@@ -72,14 +73,15 @@ export class IconFontLibrary {
   @CatchErrorDecorator
   public generateToFile(): void {
     const result = this.generate();
-    const outputFileName = `${this.options.familyName}.otf`;
-    const outputPath = path.join(this.options.outputDirectory, outputFileName);
+    const { familyName, outputDirectory } = this.options;
 
-    if (!fs.existsSync(this.options.outputDirectory)) {
-      fs.mkdirSync(this.options.outputDirectory, { recursive: true });
+    if (!fs.existsSync(outputDirectory)) {
+      fs.mkdirSync(outputDirectory, { recursive: true });
     }
 
-    fs.writeFileSync(outputPath, new Uint8Array(result.fontBuffer));
+    fs.writeFileSync(path.join(outputDirectory, `${familyName}.otf`), new Uint8Array(result.fontBuffer));
+
+    new FontExporter({ familyName, unicodeMap: result.unicodeMap }).exportToDirectory(outputDirectory);
   }
 
   private assignAutoUnicodes(sortedFiles: ISvgLoaderResult[], startCodePoint: number): Record<string, number> {

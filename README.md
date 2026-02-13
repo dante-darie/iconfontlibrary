@@ -16,7 +16,7 @@ import { IconFontLibrary } from 'iconfontlibrary';
 const library = new IconFontLibrary({
   familyName: 'MyIcons',
   svgDirectories: ['./icons'],
-  outputDirectory: './fonts',
+  outputDirectory: './fonts'
 });
 
 // Generate and write to file
@@ -37,18 +37,18 @@ const library = new IconFontLibrary(options: IIconFontLibraryOptions);
 
 #### Options
 
-| Option | Type | Default | Description |
-|---|---|---|---|
-| `familyName` | `string` | **required** | Font family name |
-| `svgDirectories` | `string[]` | **required** | Directories containing SVG files |
-| `outputDirectory` | `string` | **required** | Where to write the `.otf` file |
-| `ascender` | `number` | `800` | Font ascender value |
-| `descender` | `number` | `-200` | Font descender value |
-| `unitsPerEm` | `number` | `1000` | Font units per em |
-| `styleName` | `string` | `'Regular'` | Font style name |
-| `ligatures` | `boolean` | `true` | Enable ligature support (icon name as ligature text) |
-| `recursive` | `boolean` | `false` | Scan SVG directories recursively |
-| `unicodeAssignment` | `IUnicodeAssignment` | `{ strategy: 'auto' }` | Unicode codepoint assignment strategy |
+| Option              | Type                 | Default                | Description                                          |
+| ------------------- | -------------------- | ---------------------- | ---------------------------------------------------- |
+| `familyName`        | `string`             | **required**           | Font family name                                     |
+| `svgDirectories`    | `string[]`           | **required**           | Directories containing SVG files                     |
+| `outputDirectory`   | `string`             | **required**           | Where to write the `.otf` file                       |
+| `ascender`          | `number`             | `800`                  | Font ascender value                                  |
+| `descender`         | `number`             | `-200`                 | Font descender value                                 |
+| `unitsPerEm`        | `number`             | `1000`                 | Font units per em                                    |
+| `styleName`         | `string`             | `'Regular'`            | Font style name                                      |
+| `ligatures`         | `boolean`            | `true`                 | Enable ligature support (icon name as ligature text) |
+| `recursive`         | `boolean`            | `false`                | Scan SVG directories recursively                     |
+| `unicodeAssignment` | `IUnicodeAssignment` | `{ strategy: 'auto' }` | Unicode codepoint assignment strategy                |
 
 #### Unicode Assignment
 
@@ -67,9 +67,9 @@ const library = new IconFontLibrary(options: IIconFontLibraryOptions);
 ```typescript
 const result = library.generate();
 
-result.fontBuffer;  // ArrayBuffer — the OTF font data
-result.glyphNames;  // string[] — names of all generated glyphs
-result.unicodeMap;  // Record<string, number> — icon name to unicode codepoint mapping
+result.fontBuffer; // ArrayBuffer — the OTF font data
+result.glyphNames; // string[] — names of all generated glyphs
+result.unicodeMap; // Record<string, number> — icon name to unicode codepoint mapping
 ```
 
 **`generateToFile(): void`** — Generates the font and writes it to `{outputDirectory}/{familyName}.otf`.
@@ -109,7 +109,7 @@ const { shapes, advanceWidth } = normalizer.normalize(parsedShapes, {
   ascender: 800,
   descender: -200,
   unitsPerEm: 1000,
-  viewBox,
+  viewBox
 });
 ```
 
@@ -133,7 +133,7 @@ const glyph = transformer.createGlyph({
   name: 'home',
   unicode: 0xe000,
   normalizedData: { advanceWidth: 800, shapes: normalizedShapes },
-  ligature: 'home',
+  ligature: 'home'
 });
 
 const font = transformer.createFont(glyphs, definitions, {
@@ -141,7 +141,7 @@ const font = transformer.createFont(glyphs, definitions, {
   styleName: 'Regular',
   ascender: 800,
   descender: -200,
-  unitsPerEm: 1000,
+  unitsPerEm: 1000
 });
 ```
 

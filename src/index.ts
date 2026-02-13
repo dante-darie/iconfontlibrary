@@ -1,3 +1,5 @@
+export { FontExporter } from '@font-exporter';
+export type { IFontExporterJsonEntry, IFontExporterOptions } from '@font-exporter';
 export { IconFontLibrary } from '@main';
 export type { IIconFontLibraryOptions, IIconFontLibraryResult, IUnicodeAssignment, TUnicodeAssignmentStrategy } from '@main';
 export { SvgLoader } from '@svg-loader';

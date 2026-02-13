@@ -1,0 +1,9 @@
+const iconNames = [{{#each entries}}'{{name}}'{{#unless @last}}, {{/unless}}{{/each}}];
+
+const iconMap = {
+{{#each entries}}
+  '{{name}}': '\u{{unicode}}',
+{{/each}}
+};
+
+module.exports = { iconNames, iconMap };
