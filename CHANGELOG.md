@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/dante-darie/iconfontlibrary/compare/v1.0.1...v1.1.0) (2026-02-13)
+
+
+### Features
+
+* implemented front-end exports ([29e0323](https://github.com/dante-darie/iconfontlibrary/commit/29e03231aea8bf494e2df05dd4ec7393ec193c82))
+
 ## [1.0.1](https://github.com/dante-darie/iconfontlibrary/compare/v1.0.0...v1.0.1) (2026-02-11)
 
 
