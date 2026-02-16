@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/dante-darie/iconfontlibrary/compare/v1.3.0...v1.3.1) (2026-02-16)
+
+
+### Bug Fixes
+
+* missing handlebars precompilation ([0cd1d2e](https://github.com/dante-darie/iconfontlibrary/commit/0cd1d2e872eaf0073569337f67e2733256af6e31))
+
 # [1.3.0](https://github.com/dante-darie/iconfontlibrary/compare/v1.2.0...v1.3.0) (2026-02-16)
 
 

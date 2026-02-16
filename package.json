@@ -1,6 +1,6 @@
 {
   "name": "iconfontlibrary",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "A Node based utility that packs svg icons into a font file of different formats such as ttf, woff, woff2 and more.",
   "keywords": [
     "font",
