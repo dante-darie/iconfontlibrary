@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/dante-darie/iconfontlibrary/compare/v1.3.1...v1.3.2) (2026-02-16)
+
+
+### Bug Fixes
+
+* faulty error handler ([c2f9792](https://github.com/dante-darie/iconfontlibrary/commit/c2f9792e7244592f0afdcaa05f80a5a4208724a8))
+
 ## [1.3.1](https://github.com/dante-darie/iconfontlibrary/compare/v1.3.0...v1.3.1) (2026-02-16)
 
 
