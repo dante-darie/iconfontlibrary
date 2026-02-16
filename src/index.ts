@@ -12,3 +12,5 @@ export { SvgWindingCorrector } from '@svg-winding-corrector';
 export type { IPoint2D } from '@svg-winding-corrector';
 export { SvgOpentypeTransformer } from '@svg-opentype-transformer';
 export type { IFontOptions, IGlyphDefinition } from '@svg-opentype-transformer';
+export { unplugin } from './plugins';
+export type { UnpluginIconFontOptions } from './plugins';
