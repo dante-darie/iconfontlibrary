@@ -24,9 +24,7 @@ const plugins = createUnplugin((options: UnpluginIconFontOptions) => {
 });
 
 export const unplugin = plugins;
-export const vite = plugins.vite;
-export const webpack = plugins.webpack;
-export const rollup = plugins.rollup;
-export const esbuild = plugins.esbuild;
-
-export default plugins;
+export const vitePlugin = plugins.vite;
+export const webpackPlugin = plugins.webpack;
+export const rollupPlugin = plugins.rollup;
+export const esbuildPlugin = plugins.esbuild;

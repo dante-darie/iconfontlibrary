@@ -7,14 +7,14 @@ export interface IUnicodeAssignment {
 }
 
 export interface IIconFontLibraryOptions {
+  readonly familyName: string;
+  readonly outputDirectory: string;
+  readonly svgDirectories: string[];
   readonly ascender?: number;
   readonly descender?: number;
-  readonly familyName: string;
   readonly ligatures?: boolean;
-  readonly outputDirectory: string;
   readonly recursive?: boolean;
   readonly styleName?: string;
-  readonly svgDirectories: string[];
   readonly unicodeAssignment?: IUnicodeAssignment;
   readonly unitsPerEm?: number;
 }
