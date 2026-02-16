@@ -1,3 +1,10 @@
+## [1.3.3](https://github.com/dante-darie/iconfontlibrary/compare/v1.3.2...v1.3.3) (2026-02-16)
+
+
+### Bug Fixes
+
+* file read bail issue ([be9df41](https://github.com/dante-darie/iconfontlibrary/commit/be9df4186097ddaf4f124c2a927bc4ac8301cce1))
+
 ## [1.3.2](https://github.com/dante-darie/iconfontlibrary/compare/v1.3.1...v1.3.2) (2026-02-16)
 
 
