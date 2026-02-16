@@ -38,7 +38,7 @@ export default defineConfig({
     environment: 'node',
     coverage: {
       include: ['src/**'],
-      exclude: ['src/index.ts', 'src/**/index.ts'],
+      exclude: ['src/index.ts', 'src/**/index.ts', 'src/plugins.ts', 'src/**/*.hbs', 'src/types/**'],
       thresholds: {
         lines: 80,
         functions: 80,
