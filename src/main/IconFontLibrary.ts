@@ -91,6 +91,11 @@ export class IconFontLibrary {
   @CatchErrorDecorator
   public generateToFile(): void {
     const result = this.generate();
+
+    if (!result) {
+      return;
+    }
+
     const { familyName, outputDirectory } = this.options;
 
     if (!fs.existsSync(outputDirectory)) {

@@ -4,8 +4,11 @@ import type { IIconFontLibraryOptions } from '@main';
 
 export type UnpluginIconFontOptions = IIconFontLibraryOptions;
 
+const DEBOUNCE_MS = 200;
+
 const plugins = createUnplugin((options: UnpluginIconFontOptions) => {
   let library: IconFontLibrary;
+  let debounceTimer: ReturnType<typeof setTimeout> | undefined;
 
   return {
     name: 'unplugin-iconfontlibrary',
@@ -17,7 +20,8 @@ const plugins = createUnplugin((options: UnpluginIconFontOptions) => {
 
     watchChange(id) {
       if (id.endsWith('.svg')) {
-        library.generateToFile();
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => library.generateToFile(), DEBOUNCE_MS);
       }
     }
   };
