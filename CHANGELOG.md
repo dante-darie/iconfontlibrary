@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/dante-darie/iconfontlibrary/compare/v1.2.0...v1.3.0) (2026-02-16)
+
+
+### Features
+
+* implemented bundler plugins ([cfb7383](https://github.com/dante-darie/iconfontlibrary/commit/cfb7383087e6c379846a2b24a355ea6998bb1393))
+
 # [1.2.0](https://github.com/dante-darie/iconfontlibrary/compare/v1.1.0...v1.2.0) (2026-02-13)
 
 
