@@ -148,7 +148,7 @@ describe('CatchErrorDecorator', () => {
     expect(passedError.message).toBe('object error');
   });
 
-  it('should catch an Error instance and create an unknown error message', () => {
+  it('should catch an Error instance and preserve its message', () => {
     class TestClass {
       @CatchErrorDecorator
       public throwError(): void {
@@ -162,7 +162,7 @@ describe('CatchErrorDecorator', () => {
     expect(handleSpy).toHaveBeenCalledTimes(1);
     const passedError = handleSpy.mock.calls[0][0];
     expect(passedError).toBeInstanceOf(Error);
-    expect(passedError.message).toBe('an unknown error occurred');
+    expect(passedError.message).toBe('original message');
   });
 
   it('should catch undefined/null and create an unknown error message', () => {

@@ -9,9 +9,11 @@ export const CatchErrorDecorator = (target: unknown, propertyKey: string, descri
     } catch (e) {
       let error;
 
-      if (typeof e === 'string') {
+      if (e instanceof Error) {
+        error = e;
+      } else if (typeof e === 'string') {
         error = new Error(e);
-      } else if (e && typeof e === 'object' && !(e instanceof Error) && 'message' in e && typeof e.message === 'string') {
+      } else if (e && typeof e === 'object' && 'message' in e && typeof e.message === 'string') {
         error = new Error(e.message);
       } else {
         error = new Error('an unknown error occurred');
