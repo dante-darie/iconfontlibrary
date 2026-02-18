@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/dante-darie/iconfontlibrary/compare/v1.3.3...v1.4.0) (2026-02-18)
+
+
+### Features
+
+* implemented class name options control ([e38d018](https://github.com/dante-darie/iconfontlibrary/commit/e38d018066bec15789fc801637b5efa9da91ed56))
+
 ## [1.3.3](https://github.com/dante-darie/iconfontlibrary/compare/v1.3.2...v1.3.3) (2026-02-16)
 
 
