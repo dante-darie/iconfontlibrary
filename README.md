@@ -1,6 +1,6 @@
 # iconfontlibrary
 
-A Node.js utility that packs SVG icons into OTF font files with ligature support.
+A Node.js utility that packs SVG icons into OTF font files with ligature support. Drop in your SVGs, get a font file and ready-to-use CSS/SCSS/JS/TS bindings. Ligatures are automatically inferred from your SVG file names.
 
 ## Installation
 
@@ -19,29 +19,99 @@ const library = new IconFontLibrary({
   outputDirectory: './fonts'
 });
 
-// Generate and write to file
 library.generateToFile();
 ```
 
-This reads all `.svg` files from `./icons`, converts them into font glyphs, and writes `MyIcons.otf` to `./fonts`.
+This reads all `.svg` files from `./icons` and writes the following to `./fonts`:
 
-## API
+| File                  | Description                            |
+| --------------------- | -------------------------------------- |
+| `MyIcons.otf`         | The font file                          |
+| `MyIcons.css`         | CSS with `@font-face` and icon classes |
+| `MyIcons.module.scss` | SCSS module with icon variables        |
+| `MyIcons.mjs`         | ESM icon map                           |
+| `MyIcons.cjs`         | CJS icon map                           |
+| `MyIcons.ts`          | TypeScript icon map with types         |
+| `MyIcons.json`        | JSON icon map                          |
 
-### IconFontLibrary
+## Bundler Plugins
 
-The main entry point. Orchestrates the full pipeline from SVG files to font output.
+This library has support for all major bundlers via [unplugin](https://github.com/unjs/unplugin). The plugins generate the font on build start and automatically regenerate when `.svg` files change (add, update, remove).
+
+### Vite
 
 ```typescript
-const library = new IconFontLibrary(options: IIconFontLibraryOptions);
+import { vitePlugin } from 'iconfontlibrary';
+
+export default defineConfig({
+  plugins: [
+    vitePlugin({
+      familyName: 'MyIcons',
+      svgDirectories: ['./icons'],
+      outputDirectory: './fonts'
+    })
+  ]
+});
 ```
 
-#### Options
+### Webpack
+
+```typescript
+import { webpackPlugin } from 'iconfontlibrary';
+
+module.exports = {
+  plugins: [
+    webpackPlugin({
+      familyName: 'MyIcons',
+      svgDirectories: ['./icons'],
+      outputDirectory: './fonts'
+    })
+  ]
+};
+```
+
+### Rollup
+
+```typescript
+import { rollupPlugin } from 'iconfontlibrary';
+
+export default {
+  plugins: [
+    rollupPlugin({
+      familyName: 'MyIcons',
+      svgDirectories: ['./icons'],
+      outputDirectory: './fonts'
+    })
+  ]
+};
+```
+
+### esbuild
+
+```typescript
+import { esbuildPlugin } from 'iconfontlibrary';
+import esbuild from 'esbuild';
+
+esbuild.build({
+  plugins: [
+    esbuildPlugin({
+      familyName: 'MyIcons',
+      svgDirectories: ['./icons'],
+      outputDirectory: './fonts'
+    })
+  ]
+});
+```
+
+## Options
+
+All options are shared between `IconFontLibrary` and the bundler plugins.
 
 | Option              | Type                 | Default                | Description                                          |
 | ------------------- | -------------------- | ---------------------- | ---------------------------------------------------- |
 | `familyName`        | `string`             | **required**           | Font family name                                     |
 | `svgDirectories`    | `string[]`           | **required**           | Directories containing SVG files                     |
-| `outputDirectory`   | `string`             | **required**           | Where to write the `.otf` file                       |
+| `outputDirectory`   | `string`             | **required**           | Where to write the output files                      |
 | `ascender`          | `number`             | `800`                  | Font ascender value                                  |
 | `descender`         | `number`             | `-200`                 | Font descender value                                 |
 | `unitsPerEm`        | `number`             | `1000`                 | Font units per em                                    |
@@ -50,112 +120,26 @@ const library = new IconFontLibrary(options: IIconFontLibraryOptions);
 | `recursive`         | `boolean`            | `false`                | Scan SVG directories recursively                     |
 | `unicodeAssignment` | `IUnicodeAssignment` | `{ strategy: 'auto' }` | Unicode codepoint assignment strategy                |
 
-#### Unicode Assignment
+### Unicode Assignment
+
+By default, codepoints are auto-assigned starting from the Private Use Area (`U+E000`). You can customize the starting point or provide a manual mapping:
 
 ```typescript
-// Auto-assign codepoints starting from a given value (default: PUA range)
-{ strategy: 'auto', startCodePoint: 0xe000 }
+// Auto-assign starting from a custom codepoint
+{ strategy: 'auto', startCodePoint: 0xf000 }
 
-// Manually map icon names to codepoints
+// Manual mapping
 { strategy: 'manual', mapping: { home: 0xe001, search: 0xe002 } }
 ```
 
-#### Methods
+### Programmatic API
 
-**`generate(): IIconFontLibraryResult`** — Generates the font and returns the result without writing to disk.
+If you need the font buffer without writing to disk, use `generate()`:
 
 ```typescript
 const result = library.generate();
 
 result.fontBuffer; // ArrayBuffer — the OTF font data
 result.glyphNames; // string[] — names of all generated glyphs
-result.unicodeMap; // Record<string, number> — icon name to unicode codepoint mapping
+result.unicodeMap; // Record<string, number> — icon name → unicode codepoint
 ```
-
-**`generateToFile(): void`** — Generates the font and writes it to `{outputDirectory}/{familyName}.otf`.
-
-### Individual Pipeline Components
-
-Each stage of the pipeline is also exported for advanced use cases.
-
-#### SvgLoader
-
-Finds and reads SVG files from directories.
-
-```typescript
-const loader = new SvgLoader({ directoryPaths: ['./icons'], recursive: true });
-const files = loader.load();
-// [{ fileName: 'home', filePath: '/abs/path/home.svg', fileContent: '<svg>...</svg>' }]
-```
-
-#### SvgParser
-
-Parses an SVG string into geometric shapes (lines, cubic/quadratic bezier curves).
-
-Supports: `<path>`, `<rect>`, `<circle>`, `<ellipse>`, `<line>`, `<polygon>`, `<polyline>`, and `<g>` groups with cascading transforms.
-
-```typescript
-const parser = new SvgParser();
-const { shapes, viewBox } = parser.parse(svgContent);
-```
-
-#### SvgNormalizer
-
-Transforms shapes from SVG coordinate space (Y-down) to font coordinate space (Y-up), scaling to fit within the font's ascender/descender range.
-
-```typescript
-const normalizer = new SvgNormalizer();
-const { shapes, advanceWidth } = normalizer.normalize(parsedShapes, {
-  ascender: 800,
-  descender: -200,
-  unitsPerEm: 1000,
-  viewBox
-});
-```
-
-#### SvgWindingCorrector
-
-Removes duplicate decorative layers (gradient backgrounds, shadows) and handles shape winding analysis.
-
-```typescript
-const corrector = new SvgWindingCorrector();
-const cleanedShapes = corrector.correct(shapes);
-```
-
-#### SvgOpentypeTransformer
-
-Converts normalized shapes into opentype.js glyphs and fonts with GSUB ligature substitution.
-
-```typescript
-const transformer = new SvgOpentypeTransformer();
-
-const glyph = transformer.createGlyph({
-  name: 'home',
-  unicode: 0xe000,
-  normalizedData: { advanceWidth: 800, shapes: normalizedShapes },
-  ligature: 'home'
-});
-
-const font = transformer.createFont(glyphs, definitions, {
-  familyName: 'MyIcons',
-  styleName: 'Regular',
-  ascender: 800,
-  descender: -200,
-  unitsPerEm: 1000
-});
-```
-
-## How It Works
-
-```
-SVG files → SvgLoader → SvgParser → SvgNormalizer → SvgOpentypeTransformer → OTF font
-```
-
-1. **Load** — Reads `.svg` files from specified directories
-2. **Parse** — Converts SVG markup into geometric primitives (lines, bezier curves) grouped into shapes
-3. **Normalize** — Flips Y-axis, scales to font units, removes duplicate layers
-4. **Transform** — Builds opentype.js glyphs with ligature substitution tables and assembles the font
-
-## License
-
-MIT
