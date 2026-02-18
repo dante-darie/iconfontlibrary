@@ -11,6 +11,7 @@ export interface IIconFontLibraryOptions {
   readonly outputDirectory: string;
   readonly svgDirectories: string[];
   readonly ascender?: number;
+  readonly className?: string;
   readonly descender?: number;
   readonly ligatures?: boolean;
   readonly recursive?: boolean;

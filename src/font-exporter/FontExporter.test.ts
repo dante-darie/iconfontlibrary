@@ -20,8 +20,8 @@ describe('FontExporter', () => {
     fs.rmSync(outputDir, { recursive: true, force: true });
   });
 
-  const exportAndRead = (familyName: string, map: Record<string, number>, fileName: string): string => {
-    new FontExporter({ familyName, unicodeMap: map }).exportToDirectory(outputDir);
+  const exportAndRead = (familyName: string, map: Record<string, number>, fileName: string, className?: string): string => {
+    new FontExporter({ className, familyName, unicodeMap: map }).exportToDirectory(outputDir);
 
     return fs.readFileSync(path.join(outputDir, fileName), 'utf-8').replace(/\r\n/g, '\n');
   };
@@ -87,6 +87,15 @@ describe('FontExporter', () => {
       expect(css).toContain('.MyIcons {');
       expect(css).toContain('.MyIcons.home::before {');
     });
+
+    it('should use custom className for selectors while keeping familyName for font-family', () => {
+      const css = exportAndRead('MyIcons', { home: 0xe000 }, 'MyIcons.css', 'icon');
+
+      expect(css).toContain('.icon {');
+      expect(css).toContain('.icon.home::before {');
+      expect(css).toContain("font-family: 'MyIcons';");
+      expect(css).toContain("src: url('./MyIcons.otf') format('opentype');");
+    });
   });
 
   describe('SCSS module', () => {
@@ -106,6 +115,15 @@ describe('FontExporter', () => {
       expect(scss).toContain("    content: '\\e000';");
       expect(scss).toContain('  &.home::before {');
       expect(scss).toContain("    content: '\\e001';");
+    });
+
+    it('should use custom className for the base selector while keeping familyName for font-family', () => {
+      const scss = exportAndRead('MyIcons', { home: 0xe000 }, 'MyIcons.module.scss', 'icon');
+
+      expect(scss).toContain('.icon {');
+      expect(scss).toContain("font-family: 'MyIcons';");
+      expect(scss).toContain("src: url('./MyIcons.otf') format('opentype');");
+      expect(scss).toContain('  &.home::before {');
     });
 
     it('should include ligature settings in the base class', () => {

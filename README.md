@@ -113,6 +113,7 @@ All options are shared between `IconFontLibrary` and the bundler plugins.
 | `svgDirectories`    | `string[]`           | **required**           | Directories containing SVG files                     |
 | `outputDirectory`   | `string`             | **required**           | Where to write the output files                      |
 | `ascender`          | `number`             | `800`                  | Font ascender value                                  |
+| `className`         | `string`             | `familyName`           | CSS class name used in selectors                     |
 | `descender`         | `number`             | `-200`                 | Font descender value                                 |
 | `unitsPerEm`        | `number`             | `1000`                 | Font units per em                                    |
 | `styleName`         | `string`             | `'Regular'`            | Font style name                                      |

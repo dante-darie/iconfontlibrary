@@ -357,6 +357,25 @@ describe('IconFontLibrary', () => {
       expect(fs.existsSync(path.join(outputDir, 'TestIcons.cjs'))).toBe(true);
     });
 
+    it('should use className in CSS and SCSS selectors when provided', () => {
+      fs.writeFileSync(path.join(svgDir, 'home.svg'), SIMPLE_SQUARE_SVG);
+
+      const library = new IconFontLibrary({
+        ...createDefaultOptions(svgDir, outputDir),
+        className: 'icon'
+      });
+      library.generateToFile();
+
+      const css = fs.readFileSync(path.join(outputDir, 'TestIcons.css'), 'utf-8');
+      expect(css).toContain('.icon {');
+      expect(css).toContain('.icon.home::before');
+      expect(css).toContain("font-family: 'TestIcons';");
+
+      const scss = fs.readFileSync(path.join(outputDir, 'TestIcons.module.scss'), 'utf-8');
+      expect(scss).toContain('.icon {');
+      expect(scss).toContain("font-family: 'TestIcons';");
+    });
+
     it('should write non-empty export files with correct content', () => {
       fs.writeFileSync(path.join(svgDir, 'home.svg'), SIMPLE_SQUARE_SVG);
       fs.writeFileSync(path.join(svgDir, 'search.svg'), SIMPLE_CIRCLE_SVG);

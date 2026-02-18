@@ -104,7 +104,7 @@ export class IconFontLibrary {
 
     fs.writeFileSync(path.join(outputDirectory, `${familyName}.otf`), new Uint8Array(result.fontBuffer));
 
-    new FontExporter({ familyName, unicodeMap: result.unicodeMap }).exportToDirectory(outputDirectory);
+    new FontExporter({ className: this.options.className, familyName, unicodeMap: result.unicodeMap }).exportToDirectory(outputDirectory);
   }
 
   private assignAutoUnicodes(sortedFiles: ISvgLoaderResult[], startCodePoint: number): Record<string, number> {

@@ -10,6 +10,7 @@ import scssTemplate from './templates/scss.hbs';
 import typescriptTemplate from './templates/typescript.hbs';
 
 interface ITemplateContext {
+  readonly className: string;
   readonly entries: IFontExporterJsonEntry[];
   readonly familyName: string;
 }
@@ -42,6 +43,7 @@ export class FontExporter {
       }));
 
     this.context = {
+      className: options.className ?? options.familyName,
       entries,
       familyName: options.familyName
     };

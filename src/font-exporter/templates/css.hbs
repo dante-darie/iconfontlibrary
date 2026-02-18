@@ -3,7 +3,7 @@
   src: url('./{{familyName}}.otf') format('opentype');
 }
 
-.{{familyName}} {
+.{{className}} {
   font-family: '{{familyName}}';
   font-style: normal;
   font-weight: normal;
@@ -14,7 +14,7 @@
 }
 {{#each entries}}
 
-.{{../familyName}}.{{name}}::before {
+.{{../className}}.{{name}}::before {
   content: '{{unicodeEscape unicode}}';
 }
 {{/each}}
