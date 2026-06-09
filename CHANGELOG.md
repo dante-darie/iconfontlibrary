@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/dante-darie/iconfontlibrary/compare/v1.4.0...v1.4.1) (2026-06-09)
+
+
+### Bug Fixes
+
+* various vulnerabilities ([3fc7b17](https://github.com/dante-darie/iconfontlibrary/commit/3fc7b17142f81bdf9691f3c20038a9bc17e8e13c))
+
 # [1.4.0](https://github.com/dante-darie/iconfontlibrary/compare/v1.3.3...v1.4.0) (2026-02-18)
 
 
