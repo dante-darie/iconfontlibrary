@@ -1,10 +1,9 @@
 import { defineConfig } from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import handlebars from '@yoichiro/vite-plugin-handlebars';
+import handlebars from './plugins/handlebars';
 
 export default defineConfig({
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  plugins: [tsconfigPaths(), handlebars() as any],
+  plugins: [tsconfigPaths(), handlebars()],
   resolve: {
     alias: {
       'opentype.js': 'opentype.js/dist/opentype.module.js'
